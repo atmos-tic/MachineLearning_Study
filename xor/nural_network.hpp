@@ -9,5 +9,4 @@ VectorXd softmax(VectorXd x);
 
 double mean_squared_error(VectorXd y, VectorXd t);
 double cross_entropy_error(VectorXd y, VectorXd t);
-
 #endif

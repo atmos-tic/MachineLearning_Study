@@ -42,25 +42,10 @@ VectorXd softmax(VectorXd x){
 
 /*loss function*/
 double mean_squared_error(VectorXd y, VectorXd t){
-    return ((y - t)*(y - t)).sum()/2;
+    return ((y - t).array().pow(2)).sum()/2;
 }
 
 double cross_entropy_error(VectorXd y, VectorXd t){
-    VectorXd delta = VectorXd::Constant(y.size(),0.0000001);
+    VectorXd delta = VectorXd::Constant(y.size(),0.00001);
     return -(t.array()*((y + delta).array().log())).sum();
-}
-
-/*gradient*/
-VectorXd gradient(double(*func)(VectorXd, VectorXd), VectorXd x, VectorXd t){
-    VectorXd grad(x.size());
-    VectorXd tmp_x[2];
-    double h = 0.0001;
-    for(int i = 0;i < x.size(); i++){
-        tmp_x[0] = x;
-        tmp_x[0](i) += h;
-        tmp_x[1] = x;
-        tmp_x[1](i) -= h;
-        grad(i) = (func(tmp_x[0], t) - func(tmp_x[1], t)) / (2*h);
-    }
-    return grad;
 }
