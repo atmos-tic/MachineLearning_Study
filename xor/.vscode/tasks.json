@@ -9,7 +9,8 @@
             "command": "g++",
             "args": [
                 // Ask msbuild to generate full paths for file names.
-                "main.cpp"
+                "main.cpp",
+                "logic_circuit.cpp"
             ],
             "group": "build",
             "presentation": {

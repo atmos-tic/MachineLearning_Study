@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "dense": "cpp",
+        "cmath": "cpp",
+        "cstddef": "cpp",
+        "cstdlib": "cpp",
+        "cstring": "cpp",
+        "cwchar": "cpp",
+        "iosfwd": "cpp",
+        "core": "cpp"
+    }
+}
