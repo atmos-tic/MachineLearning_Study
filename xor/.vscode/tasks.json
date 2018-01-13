@@ -10,7 +10,8 @@
             "args": [
                 // Ask msbuild to generate full paths for file names.
                 "main.cpp",
-                "logic_circuit.cpp"
+                "logic_circuit.cpp",
+                "nural_network.cpp"
             ],
             "group": "build",
             "presentation": {

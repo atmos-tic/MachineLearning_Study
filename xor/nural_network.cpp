@@ -1,40 +1,42 @@
 #include <iostream>
 #include "nural_network.hpp"
 #include <eigen3/Eigen/Dense>
+using namespace Eigen;
 #include "math.h"
 
-double step_function(double x){
-    if(x > 0){
-        return 1;
-    }else{
-        return 0;
+VectorXd step_function(VectorXd x){
+    VectorXd y(x.size());
+    for(int i = 0; i < x.size(); i++){
+        y(i) = x(i) > 0;
     }
+    return y;
 }
 
-double sigmoid_function(double x){
-    return 1 / (1 + exp(x));
-}
-
-double ReLU(double x){
-    if(x > 0){
-        return x;
-    }else{
-        return 0;
+VectorXd sigmoid_function(VectorXd x){
+    VectorXd y(x.size());
+    for(int i = 0; i < x.size(); i++){
+        y(i) = 1 / (1 + exp(x(i)));
     }
+    return y;
 }
 
-void softmax(double in[], double out[], int n){
-    int sum = 0, max = 0;
-    //オーバーフロー対策・最大値を求め引く
-    for(int i = 0; i < n; i++){
-        if(max < in[i]){
-            max = in[i];
+VectorXd ReLU(VectorXd x){
+    VectorXd y(x.size());
+    for(int i = 0; i < x.size(); i++){
+        if(x(i) > 0){
+             y(i) = x(i);
+        }else{
+            y(i) = 0;
         }
     }
-    for(int i = 0; i < n; i++){
-        sum += exp(in[i]-max);
-    }
-    for(int i = 0; i < n; i++){
-        out[i] = exp(in[i]-max)/sum;
-    }
+    return y;
+}
+
+VectorXd softmax(VectorXd x){
+    double max = x.maxCoeff(), sum;
+    //オーバーフロー対策・最大値を求め引く
+    VectorXd y, exp_x;
+    exp_x = (x - max*VectorXd::Ones(x.size())).array().exp();
+    sum = exp_x.sum();
+    y = exp_x/sum;
 }
