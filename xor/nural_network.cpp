@@ -34,9 +34,18 @@ VectorXd ReLU(VectorXd x){
 
 VectorXd softmax(VectorXd x){
     double max = x.maxCoeff(), sum;
-    //オーバーフロー対策・最大値を求め引く
     VectorXd y, exp_x;
-    exp_x = (x - max*VectorXd::Ones(x.size())).array().exp();
+    exp_x = (x - max*VectorXd::Ones(x.size())).array().exp();//オーバーフロー対策・最大値を求め全要素から引く
     sum = exp_x.sum();
     y = exp_x/sum;
+}
+
+/*loss function*/
+double mean_squared_error(VectorXd y, VectorXd t){
+    return ((y - t)*(y - t)).sum()/2;
+}
+
+double cross_entropy_error(VectorXd y, VectorXd t){
+    VectorXd delta = VectorXd::Constant(y.size(),0.0000001);
+    return -(t.array()*((y + delta).array().log())).sum();
 }
