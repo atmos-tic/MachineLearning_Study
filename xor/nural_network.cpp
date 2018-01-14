@@ -4,6 +4,10 @@
 using namespace Eigen;
 #include "math.h"
 
+Nuro::Nuro(MatrixXd w, VectorXd b){
+    weight = w;
+    bias = b;
+}
 VectorXd step_function(VectorXd x){
     VectorXd y(x.size());
     for(int i = 0; i < x.size(); i++){
