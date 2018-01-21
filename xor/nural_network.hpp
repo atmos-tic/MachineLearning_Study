@@ -3,13 +3,16 @@
 #include <eigen3/Eigen/Dense>
 using namespace Eigen;
 
+#define DATA_NUM (4)
+#define lEARN (0.1)
+
 class Afine{
     MatrixXd weight;
     VectorXd bias;
     MatrixXd in,out;
-    int DATA_NUM;
 public:
     Afine(int in_num, int out_num);
+    MatrixXd param(void);
     MatrixXd forward(MatrixXd x);
     MatrixXd backward(MatrixXd din);
 };
@@ -34,4 +37,5 @@ public:
     MatrixXd backward(MatrixXd din);
 };
 
+double mean_squared_error(MatrixXd y, MatrixXd t);
 #endif
