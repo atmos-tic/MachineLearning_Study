@@ -16,9 +16,12 @@ MatrixXd test_data(2, 4);
 Logic l;
 Afine afine1(3,2);
 Afine afine2(1,3);
-Sigmoid sig;
+Sigmoid sig1, sig2;
+
+
 MatrixXd teaching_data(MatrixXd data);
 int network (void);
+
 int main(){
     Logic l;
     cout << l.AND(0,1) << endl;
@@ -28,11 +31,13 @@ int main(){
         0,1,0,1;
 
     cout << "a" << endl;
-//    while(network());
-    for(int i = 0; i < 300; i++){
-        network();
-    }
+    
+    while(network());
+    // for(int i = 0; i < 10000; i++){
+    //     network();
+    // }
     cout << "b" << endl;
+    cout << "x" << sig2.forward(afine2.forward(sig1.forward(afine1.forward(test_data)))) << endl;
     /*止め*/
     char a[10];
     cin >> a;
@@ -49,10 +54,16 @@ MatrixXd teaching_data(MatrixXd data){
 
 int network (void){
     double loss;
-    loss = mean_squared_error(afine2.forward(afine1.forward(test_data)), teaching_data(test_data));
-    MatrixXd m_loss = afine2.forward(afine1.forward(test_data))  - teaching_data(test_data);
-    afine1.backward(afine2.backward(m_loss));
-    if(loss < 0.00000001 && loss > -0.00000001){
+    Softmax_With_Loss SwL(teaching_data(test_data));
+
+    // loss = mean_squared_error(sig2.forward(afine2.forward(sig1.forward(afine1.forward(test_data)))), teaching_data(test_data));
+    // MatrixXd m_loss = sig2.forward(afine2.forward(sig1.forward(afine1.forward(test_data)))) - teaching_data(test_data);
+    // afine1.backward(sig1.backward(afine2.backward(sig2.backward(m_loss))));
+
+    loss = SwL.forward(afine2.forward(sig1.forward(afine1.forward(test_data))));
+    afine1.backward(sig1.backward(afine2.backward(SwL.backward())));
+ 
+    if(loss < 0.00001 && loss > -0.00001){
         return 0;
     }else{
         cout << "loss" << loss <<endl;
