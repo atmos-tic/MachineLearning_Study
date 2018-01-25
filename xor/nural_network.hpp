@@ -30,11 +30,11 @@ class Softmax_With_Loss{
     MatrixXd teach;
 private:
     MatrixXd softmax(MatrixXd x);
-    double cross_entropy_error(MatrixXd y, VectorXd t);
+    double cross_entropy_error(MatrixXd y, MatrixXd t);
 public:
     Softmax_With_Loss(MatrixXd t);
     double forward(MatrixXd x);
-    MatrixXd backward(MatrixXd din);
+    MatrixXd backward(void);
 };
 
 double mean_squared_error(MatrixXd y, MatrixXd t);

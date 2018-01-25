@@ -17,8 +17,8 @@ MatrixXd Afine::backward(MatrixXd din){
     MatrixXd dout = weight.transpose() * din;
     weight += -din * in.transpose() / DATA_NUM;
     bias += -din * VectorXd::Ones(DATA_NUM) / DATA_NUM;
-    //std::cout << "w"<< weight << std::endl;
-    //std::cout << "b"<< bias << std::endl;
+    // std::cout << "w"<< weight << std::endl;
+    // std::cout << "b"<< bias << std::endl;
     return dout;
 }
 
@@ -40,7 +40,7 @@ MatrixXd Afine::backward(MatrixXd din){
 
 MatrixXd Sigmoid::forward(MatrixXd x){
     in = x;
-    out = 1 / (1 + x.array().exp());
+    out = 1 / (1 + (-x).array().exp());
     return out;
 }
 MatrixXd Sigmoid::backward(MatrixXd din){
@@ -77,23 +77,23 @@ MatrixXd Softmax_With_Loss::softmax(MatrixXd x){
     double max = x.maxCoeff();
     MatrixXd exp_x, y;
     exp_x = (x - max*MatrixXd::Ones(x.rows(),x.cols())).array().exp();//オーバーフロー対策・最大値を求め全要素から引く
-    y = exp_x/exp_x.sum();
+    y = exp_x / exp_x.sum();
     return y;
 }
-double Softmax_With_Loss::cross_entropy_error(MatrixXd y, VectorXd t){
+double Softmax_With_Loss::cross_entropy_error(MatrixXd y, MatrixXd t){
     MatrixXd delta = MatrixXd::Constant(y.rows(), y.cols(),0.00001);
-    return -(((y + delta).array().log())*(t*VectorXd::Ones(y.size()).transpose()).array()).sum();
+    return -(((y + delta).array().log())*t.array()).sum();
 }
 Softmax_With_Loss::Softmax_With_Loss(MatrixXd t){
     teach = t;
 }
 double Softmax_With_Loss::forward(MatrixXd x){
     in = x;
-    out = softmax(in);
+    out = softmax(in); 
     loss = cross_entropy_error(out, teach);
     return loss;
 }
-MatrixXd Softmax_With_Loss::backward(MatrixXd din){
+MatrixXd Softmax_With_Loss::backward(void){
     MatrixXd dout = out - teach;
     return dout;
 }
