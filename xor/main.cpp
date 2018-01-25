@@ -56,10 +56,12 @@ int network (void){
     double loss;
     Softmax_With_Loss SwL(teaching_data(test_data));
 
+    // /*シグモイド　二乗和誤差*/
     // loss = mean_squared_error(sig2.forward(afine2.forward(sig1.forward(afine1.forward(test_data)))), teaching_data(test_data));
     // MatrixXd m_loss = sig2.forward(afine2.forward(sig1.forward(afine1.forward(test_data)))) - teaching_data(test_data);
     // afine1.backward(sig1.backward(afine2.backward(sig2.backward(m_loss))));
 
+    /*ソフトマックス関数　交差エントロピー*/
     loss = SwL.forward(afine2.forward(sig1.forward(afine1.forward(test_data))));
     afine1.backward(sig1.backward(afine2.backward(SwL.backward())));
  
