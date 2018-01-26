@@ -4,9 +4,10 @@
 using namespace Eigen;
 #include "math.h"
 
-Afine::Afine(int out_num, int in_num){
+Afine::Afine(int out_num, int in_num, double r){
     weight = MatrixXd::Random(out_num, in_num);
     bias = VectorXd::Zero(out_num);
+    rate = r;
 }
 MatrixXd Afine::forward(MatrixXd x){
     in = x;
@@ -15,10 +16,8 @@ MatrixXd Afine::forward(MatrixXd x){
 }
 MatrixXd Afine::backward(MatrixXd din){
     MatrixXd dout = weight.transpose() * din;
-    weight += -din * in.transpose() / DATA_NUM;
-    bias += -din * VectorXd::Ones(DATA_NUM) / DATA_NUM;
-    // std::cout << "w"<< weight << std::endl;
-    // std::cout << "b"<< bias << std::endl;
+    weight += -din * rate * in.transpose() / DATA_NUM;
+    bias += -din * rate * VectorXd::Ones(DATA_NUM) / DATA_NUM;
     return dout;
 }
 
@@ -101,4 +100,9 @@ MatrixXd Softmax_With_Loss::backward(void){
 /*loss function*/
 double mean_squared_error(MatrixXd y, MatrixXd t){
     return ((y - t).array().pow(2)).sum()/2;
+}
+
+double cross_entropy_error(MatrixXd y, MatrixXd t){
+    MatrixXd delta = MatrixXd::Constant(y.rows(), y.cols(),0.00001);
+    return -(((y + delta).array().log())*t.array()).sum();
 }

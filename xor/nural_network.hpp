@@ -10,8 +10,9 @@ class Afine{
     MatrixXd weight;
     VectorXd bias;
     MatrixXd in,out;
+    double rate;//学習係数
 public:
-    Afine(int in_num, int out_num);
+    Afine(int out_num, int in_num, double r);
     MatrixXd param(void);
     MatrixXd forward(MatrixXd x);
     MatrixXd backward(MatrixXd din);
@@ -38,4 +39,5 @@ public:
 };
 
 double mean_squared_error(MatrixXd y, MatrixXd t);
+double cross_entropy_error(MatrixXd y, MatrixXd t);
 #endif
