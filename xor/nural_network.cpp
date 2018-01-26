@@ -21,22 +21,6 @@ MatrixXd Afine::backward(MatrixXd din){
     return dout;
 }
 
-// class Step{
-//     MatrixXd in, out;
-// public:
-//     MatrixXd forward(MatrixXd x){
-//         in = x;
-//         for(int i = 0; i < x.size(); i++){
-//             out(i) = x(i) > 0;
-//         }
-//         return out;
-//     }
-//     MatrixXd backward(MatrixXd din){
-//         MatrixXd dout = MatrixXd::Zero(din.size(), din.size());
-//         return dout;
-//     }
-// };
-
 MatrixXd Sigmoid::forward(MatrixXd x){
     in = x;
     out = 1 / (1 + (-x).array().exp());
