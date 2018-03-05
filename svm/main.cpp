@@ -23,10 +23,9 @@ Eigen::VectorXd alpha(Data_Num);
 Eigen::VectorXd weight(Ndata);
 double bias;
 Eigen::MatrixXd test_data(Data_Num, Ndata);
-Eigen::VectorXd teach_data(Data_Num);
+Eigen::MatrixXd teach_data(Data_Num, 1);
 
-void SVM_Gradient_Descent(void);
-
+void SVM_Gradient_Descent(Eigen::MatrixXd test, Eigen::MatrixXd teach);
 
 int main(void){
 
@@ -37,10 +36,11 @@ int main(void){
     img += cv::Scalar(255, 255 ,255);
     cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
     for(int i = 0; i < Data_Num; i++){
-        std::cout<<test_data(i,0)<<test_data(i,1)<<teach_data(i)<<std::endl;
         cv::circle(img, cv::Point(test_data(i,0)*32, test_data(i,1)*32), 10, cv::Scalar(124*(1+teach_data(i)), 0 ,124*(1-teach_data(i))), -1);
     }
     
+    SVM_Gradient_Descent(test_data, teach_data);
+
     cv::imshow("image", img);
     
     cv::waitKey(0);
@@ -48,10 +48,9 @@ int main(void){
     return 0;
 }
 
-
 void SVM_Gradient_Descent(Eigen::MatrixXd test, Eigen::MatrixXd teach){
-    Eigen::MatrixXd H_Matrix = (teach*Eigen::MatrixXd::Ones(1, Data_Num))*((Eigen::MatrixXd::Ones(Data_Num, 1)*teach.transpose()))*test_data.transpose()*test_data;
-    Eigen::MatrixXd alpha;
+    Eigen::MatrixXd H_Matrix = (teach*Eigen::MatrixXd::Ones(1, Data_Num))*((Eigen::MatrixXd::Ones(Data_Num, 1)*teach.transpose()))*(test_data*test_data.transpose());
+    Eigen::MatrixXd alpha(Data_Num,1);
     for(int i = 0; i < trial; i++){
         alpha = alpha + eta_alpha*((Eigen::MatrixXd::Ones(Data_Num,1)) - H_Matrix*alpha - eta_beta*(teach*Eigen::MatrixXd::Ones(1, Data_Num))*((Eigen::MatrixXd::Ones(Data_Num, 1)*teach.transpose()))*alpha);
     }
