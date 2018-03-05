@@ -18,7 +18,7 @@ class SVM{
 #define Data_Num (8)
 #define eta_alpha (0.0001)
 #define eta_beta (0.1)
-#define trial (1000)
+#define trial (30000)
 Eigen::VectorXd alpha(Data_Num);
 Eigen::VectorXd weight(Ndata);
 double bias;
@@ -58,11 +58,10 @@ void SVM_Gradient_Descent(Eigen::MatrixXd test, Eigen::MatrixXd teach){
         alpha = alpha + eta_alpha*((Eigen::MatrixXd::Ones(Data_Num,1)) - H_Matrix*alpha - eta_beta*(teach*Eigen::MatrixXd::Ones(1, Data_Num))*((Eigen::MatrixXd::Ones(Data_Num, 1)*teach.transpose()))*alpha);
     }
 
-
     Eigen::MatrixXd k = alpha.array()*teach.array();
     weight =  test.transpose() * k;
-    std::cout<<weight<<std::endl;
     bias = (teach - test*weight).mean();
+    std::cout<<weight<<"|"<<bias<<std::endl;
 }
 
 double SVM::svm_func(Eigen::MatrixXd data){
