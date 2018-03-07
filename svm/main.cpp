@@ -8,17 +8,18 @@
 #include <opencv2/videoio.hpp> // videoioのヘッダーをインクルード
 #include <opencv2/highgui.hpp> // highguiのヘッダーをインクルード
 
- SVM svm(2, 8);
+ SVM svm(2, 8);//二次元データ　データ数8
 Eigen::MatrixXd test_data(svm.Data_Num, svm.Data_Div);
 Eigen::MatrixXd teach_data(svm.Data_Num, 1);
 
 int main(void){
 
+    /*学習・教師データ*/
     test_data << 9,5, 5,7, 7,6, 8,9, 3,4, 2,3, 4,3, 1,2;
     teach_data << 1,1,1,1,-1,-1,-1,-1;
-
     svm.Teaching_Data_Input(test_data, teach_data);
     svm.SVM_Trial_Param(0.0001, 0.1, 30000);  
+
     /*データの描画*/
     cv::Mat img= cv::Mat::zeros(512, 512, CV_8UC3);
     img += cv::Scalar(255, 255 ,255);
